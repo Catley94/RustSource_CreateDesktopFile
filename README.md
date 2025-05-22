@@ -9,6 +9,9 @@ Name, Comment, Exec, Icon, Terminal, Type, Categories
 
 (Please create a pull request if you want to add more options)
 
+![CDF_Details.png](images/CDF_Details.png)
+![CDF_Help.png](images/CDF_Help.png)
+
 ## Install 
 
 - `git clone` the repo or download the latest release
