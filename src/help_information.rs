@@ -1,4 +1,5 @@
 pub fn display_help_information(args: Vec<String>) {
+    println!("CreateDesktopFile v{}", env!("CARGO_PKG_VERSION"));
     println!("Usage: {} [--global | --local]", args[0]);
     println!("Default: --local will be used if no argument is specified");
     println!("Options:");
