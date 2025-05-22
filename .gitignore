@@ -15,3 +15,4 @@ Cargo.lock
 .idea/modules.xml
 .idea/RustSource_CreateDesktopFile.iml
 .idea/vcs.xml
+**/.idea
