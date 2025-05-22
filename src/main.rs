@@ -1,11 +1,25 @@
 mod desktop_entry;
 mod user_details;
 
-use std::io;
 use std::fs::File;
 use std::io::Write;
+use std::env;
 
 fn main() -> std::io::Result<()>{
+
+    let supported_oses: Vec<&str> = vec!["linux"];
+
+    // Check if this is a Linux OS, if it isn't, throw an error
+    let os: &str = env::consts::OS;
+
+    if !supported_oses.contains(&os) {
+        println!("--------------------------------------------------------------------");
+        println!("This progam is only supported by the following Operating Systems:");
+        println!("--------------------------------------------------------------------");
+        supported_oses.iter().for_each(|os| println!("{}", os));
+        println!("--------------------------------------------------------------------");
+        panic!("This program is not running on a supported OS. Exiting.");
+    }
 
     // Path to the where the .desktop file should be moved to
     let mut path = dirs::home_dir().expect("Failed to get home directory");
