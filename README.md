@@ -2,7 +2,7 @@
 
 #### Quite simply, will create a .desktop file given the information by the user.
 
-The name of the .desktop file is populated by the Name given by the uesr.
+The name of the .desktop file is populated by the Name given by the user. <br>
 Information for the .desktop file supported is below:
 
 Name, Comment, Exec, Icon, Terminal, Type, Categories
