@@ -3,10 +3,11 @@ mod user_details;
 
 use std::fs::File;
 use std::io::Write;
-use std::env;
+use std::{env};
 
 fn main() -> std::io::Result<()>{
 
+    let global_arg = "--global";
     let supported_oses: Vec<&str> = vec!["linux"];
 
     // Check if this is a Linux OS, if it isn't, throw an error
@@ -21,10 +22,32 @@ fn main() -> std::io::Result<()>{
         panic!("This program is not running on a supported OS. Exiting.");
     }
 
+    let args: Vec<String> = env::args().collect();
+    let is_global = args.iter().any(|arg: &String| arg == global_arg);
+    if args.iter().any(|arg| arg == "--help") {
+        println!("Usage: {} [--global]", args[0]);
+        println!("Options:");
+        println!("  --local     (Default) Install .desktop file locally in .local/share/applications/");
+        println!("  --global    Install .desktop file globally in /usr/share/applications/");
+        println!("  --help      Show this help message");
+        std::process::exit(0);
+    }
+
+
     // Path to the where the .desktop file should be moved to
     let mut path = dirs::home_dir().expect("Failed to get home directory");
     let local_share_applications_path = ".local/share/applications/";
-    path.push(local_share_applications_path);
+    let global_share_applications_path = "/usr/share/applications/";
+    if is_global {
+        // Check if running with sudo
+        if !nix::unistd::getuid().is_root() {
+            panic!("Global installation requires root privileges. Please run with sudo.");
+        }
+        path = global_share_applications_path.into();
+    } else {
+        path.push(local_share_applications_path);
+    }
+
 
     // Create variables as containers for user input
     let mut name: String = String::new();

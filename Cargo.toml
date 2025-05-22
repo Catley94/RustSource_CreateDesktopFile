@@ -5,3 +5,4 @@ edition = "2024"
 
 [dependencies]
 dirs = "5.0"
+nix = { version = "0.30.1", features = ["user"] }
