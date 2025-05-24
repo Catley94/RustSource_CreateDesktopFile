@@ -74,6 +74,12 @@ struct AppState {
 /// - Handles errors from the `run_cli_mode` and `run_gui_mode` functions and propagates them back to the caller.
 ///
 fn main() -> std::io::Result<()> {
+
+    //Supported OSes
+    let supported_oses: Vec<&str> = vec!["linux"];
+    let os: &str = env::consts::OS;
+    break_here_if_os_not_supported(supported_oses, &os);
+
     // Get all arguments
     let args: Vec<String> = env::args().collect();
     
@@ -149,10 +155,7 @@ fn main() -> std::io::Result<()> {
 ///    - Creates or overwrites the `.desktop` file at the determined path.
 ///
 fn run_cli_mode(is_global: bool) -> std::io::Result<()> {
-    //Supported OSes
-    let supported_oses: Vec<&str> = vec!["linux"];
-    let os: &str = env::consts::OS;
-    break_here_if_os_not_supported(supported_oses, &os);
+
 
     // Get home directory
     let mut path = dirs::home_dir()
