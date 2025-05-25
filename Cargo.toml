@@ -1,8 +1,9 @@
 [package]
 name = "CreateDesktopFile"
-version = "0.2.3"
+version = "1.0.0"
 edition = "2024"
 
 [dependencies]
 dirs = "5.0"
 nix = { version = "0.30.1", features = ["user"] }
+gtk = { version = "0.9.6", package = "gtk4", features = ["v4_6"] }
