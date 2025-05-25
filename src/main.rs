@@ -432,6 +432,8 @@ fn build_ui(app: &Application, state: &Arc<Mutex<AppState>>) {
         ("categories", Label::new(Some("Categories:")), Entry::new()),
     ];
 
+    
+    
     // Add labels and entries to the grid
     for (i, (_, label, entry)) in entries.iter().enumerate() {
         label.set_halign(gtk::Align::End);
@@ -444,6 +446,13 @@ fn build_ui(app: &Application, state: &Arc<Mutex<AppState>>) {
     grid.attach(&button, 0, 6, 2, 1);
     button.set_margin_top(12);
     button.set_hexpand(true);
+
+    // Add the informational label below the button
+    let info_label = Label::new(Some("This will only create .desktop files within ~/.local/share/applications"));
+    info_label.set_margin_top(12);
+    info_label.set_wrap(true);
+    info_label.set_margin_start(6);
+    grid.attach(&info_label, 0, 7, 2, 1);  // Attach to row 7 (after the button which is at row 6)
 
     // Create the window
     let window = ApplicationWindow::builder()
