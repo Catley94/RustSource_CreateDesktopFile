@@ -1,0 +1,12 @@
+// Flags supported by the application
+pub const LOCAL: &str = "--local";
+pub const GLOBAL: &str = "--global";
+pub const HELP: &str = "--help";
+pub const VERSION: &str = "--version";
+pub const NAME: &str = "--name";
+pub const COMMENT: &str = "--comment";
+pub const EXEC_PATH: &str = "--exec-path";
+pub const ICON_PATH: &str = "--icon-path";
+pub const TERMINAL_APP: &str = "--terminal-app";
+pub const APP_TYPE: &str = "--app-type";
+pub const CATEGORIES: &str = "--categories";

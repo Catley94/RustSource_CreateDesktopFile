@@ -1,6 +1,7 @@
 //! Contains modules and components required for desktop entry generation.
 mod desktop_entry;
 mod user_details;
+mod flags;
 mod help_information;
 
 use std::fs::File;
@@ -75,6 +76,8 @@ struct AppState {
 ///
 fn main() -> std::io::Result<()> {
 
+    // Flags supported by the application
+
     //Supported OSes
     let supported_oses: Vec<&str> = vec!["linux"];
     let os: &str = env::consts::OS;
@@ -83,19 +86,42 @@ fn main() -> std::io::Result<()> {
     // Get all arguments
     let args: Vec<String> = env::args().collect();
     
-    // Check for CLI flags --cli / --local / --global / --help
-    let is_cli = args.iter().any(|arg| arg == "--local" || arg == "--global" || arg == "--cli");
-    let is_global = args.iter().any(|arg| arg == "--global");
+    // Check for CLI flags
+    let is_cli = args.iter().any(|arg| arg == flags::LOCAL || arg == flags::GLOBAL || arg == flags::NAME);
+    let is_global = args.iter().any(|arg| arg == flags::GLOBAL);
+
+    // Add these checks before the if is_cli block
+    let has_name = args.iter().any(|arg| arg == "--name");
+    let has_desktop_flags = args.iter().any(|arg| 
+        arg == flags::COMMENT ||
+        arg == flags::EXEC_PATH ||
+        arg == flags::ICON_PATH ||
+        arg == flags::TERMINAL_APP ||
+        arg == flags::APP_TYPE ||
+        arg == flags::CATEGORIES
+    );
+
+    // If desktop flags are present but no --name, panic
+    if has_desktop_flags && !has_name {
+        panic!("Need to specify --name alongside passing details. Try again. Exiting.");
+    }
+
 
     // Check if user wants to view help information first
-    if args.iter().any(|arg| arg == "--help") {
+    if args.iter().any(|arg| arg == flags::HELP) {
         help_information::display_help_information(args);
         std::process::exit(0);
     }
-
+    
+    // Check if user wants to view version
+    if args.iter().any(|arg: &String| arg == flags::VERSION) {
+        println!("CreateDesktopFile v{}", env!("CARGO_PKG_VERSION"));
+        std::process::exit(0);
+    }
+    
     if is_cli {
         // Run CLI version
-        run_cli_mode(is_global)?;
+        run_cli_mode(is_global, args)?;
     } else {
         // Run GUI version
         run_gui_mode()?;
@@ -154,7 +180,7 @@ fn main() -> std::io::Result<()> {
 ///    - Constructs a `.desktop` entry using the entered details.
 ///    - Creates or overwrites the `.desktop` file at the determined path.
 ///
-fn run_cli_mode(is_global: bool) -> std::io::Result<()> {
+fn run_cli_mode(is_global: bool, args: Vec<String>) -> std::io::Result<()> {
 
 
     // Get home directory
@@ -185,16 +211,119 @@ fn run_cli_mode(is_global: bool) -> std::io::Result<()> {
     let mut app_type = String::new();
     let mut categories = String::new();
 
-    // Ask user to populate details for .desktop file
-    user_details::ask_user_to_fill_in_details(
-        &mut name,
-        &mut comment,
-        &mut exec_path,
-        &mut icon_path,
-        &mut terminal_app,
-        &mut app_type,
-        &mut categories
-    );
+
+
+    let arg_name_value: Option<String> = args.iter()
+        .position(|arg: &String| arg == flags::NAME)
+        .and_then(|index| args.get(index + 1))
+        .map(|value: &String| value.to_string());
+
+    if let Some(_name) = &arg_name_value {
+        // --name is provided, so .desktop details will be provided by flags / arguments
+        println!("Name provided via flag");
+        name = _name.to_string();
+
+        println!("Name provided: {}", _name);
+
+        let arg_comment_value: Option<String> = args.iter()
+            .position(|arg: &String| arg == flags::COMMENT)
+            .and_then(|index| {
+                // Collect all arguments after --comment until the next flag (starts with --)
+                let mut comment_parts = Vec::new();
+                let mut current_index = index + 1;
+                
+                while let Some(arg) = args.get(current_index) {
+                    if arg.starts_with("--") {
+                        break;
+                    }
+                    comment_parts.push(arg);
+                    current_index += 1;
+                }
+                
+                if comment_parts.is_empty() {
+                    None
+                } else {
+                    Some(comment_parts.iter().map(|s| s.as_str()).collect::<Vec<_>>().join(" "))
+                }
+            });
+
+        if let Some(_comment) = &arg_comment_value {
+            println!("Comment provided: {}", _comment);
+            comment = arg_comment_value.unwrap();
+        }
+
+        let arg_exec_path_value: Option<String> = args.iter()
+            .position(|arg: &String| arg == flags::EXEC_PATH)
+            .and_then(|index| args.get(index + 1))
+            .map(|value: &String| value.to_string());
+
+        if let Some(_exec_path) = &arg_exec_path_value {
+            println!("Executable path provided: {}", _exec_path);
+            exec_path = arg_exec_path_value.unwrap();
+        }
+
+        let arg_icon_path_value: Option<String> = args.iter()
+            .position(|arg: &String| arg == flags::ICON_PATH)
+            .and_then(|index| args.get(index + 1))
+            .map(|value: &String| value.to_string());
+
+        if let Some(_icon_path) = &arg_icon_path_value {
+            println!("Icon path provided: {}", _icon_path);
+            icon_path = arg_icon_path_value.unwrap();
+        }
+
+        let arg_terminal_value: Option<String> = args.iter()
+            .position(|arg: &String| arg == flags::TERMINAL_APP)
+            .and_then(|index| args.get(index + 1))
+            .map(|value: &String| value.to_string());
+
+        if let Some(_terminal_app) = &arg_terminal_value {
+            println!("Terminal provided: {}", _terminal_app);
+            terminal_app = arg_terminal_value.unwrap();
+        }
+
+        let arg_app_type_value: Option<String> = args.iter()
+            .position(|arg: &String| arg == flags::APP_TYPE)
+            .and_then(|index| args.get(index + 1))
+            .map(|value: &String| value.to_string());
+
+        if let Some(_app_type) = &arg_app_type_value {
+            println!("App type provided: {}", _app_type);
+            app_type = arg_app_type_value.unwrap();
+        }
+
+        let arg_categories_value: Option<String> = args.iter()
+            .position(|arg: &String| arg == flags::CATEGORIES)
+            .and_then(|index| args.get(index + 1))
+            .map(|value: &String| value.to_string());
+
+        if let Some(_categories) = &arg_categories_value {
+            println!("Categories provided: {}", _categories);
+            categories = arg_categories_value.unwrap();
+        }
+
+
+    } else {
+        // --name has not been used, thus details will need to be provided by user
+
+        println!("Ask user for details");
+
+        // Ask user to populate details for .desktop file
+        user_details::ask_user_to_fill_in_details(
+            &mut name,
+            &mut comment,
+            &mut exec_path,
+            &mut icon_path,
+            &mut terminal_app,
+            &mut app_type,
+            &mut categories
+        );
+
+
+    }
+
+
+
 
     // Create and write the desktop entry
     let filename = format!("{}.desktop", name.trim());
@@ -540,4 +669,35 @@ fn build_ui(app: &Application, state: &Arc<Mutex<AppState>>) {
     });
 
     window.present();
+}
+
+fn get_multi_word_arg(args: &[String], flag: &str) -> Option<String> {
+    args.iter()
+        .position(|arg| arg == flag)
+        .and_then(|index| {
+            // First, check if the next argument is quoted
+            if let Some(next_arg) = args.get(index + 1) {
+                if next_arg.starts_with('"') && next_arg.ends_with('"') {
+                    // Return the quoted string without the quotes
+                    return Some(next_arg[1..next_arg.len()-1].to_string());
+                }
+            }
+
+            // If not quoted, collect all words until the next -- or end
+            let remaining_args = &args[index + 1..];
+            let mut comment_words = Vec::new();
+            
+            for arg in remaining_args {
+                if arg.starts_with("--") {
+                    break;
+                }
+                comment_words.push(arg);
+            }
+            
+            if comment_words.is_empty() {
+                None
+            } else {
+                Some(comment_words.iter().map(|s| s.as_str()).collect::<Vec<_>>().join(" "))
+            }
+        })
 }
