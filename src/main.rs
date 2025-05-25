@@ -220,10 +220,10 @@ fn run_cli_mode(is_global: bool, args: Vec<String>) -> std::io::Result<()> {
 
     if let Some(_name) = &arg_name_value {
         // --name is provided, so .desktop details will be provided by flags / arguments
-        println!("Name provided via flag");
+        // println!("Name provided via flag");
         name = _name.to_string();
 
-        println!("Name provided: {}", _name);
+        // println!("Name provided: {}", _name);
 
         let arg_comment_value: Option<String> = args.iter()
             .position(|arg: &String| arg == flags::COMMENT)
@@ -248,7 +248,7 @@ fn run_cli_mode(is_global: bool, args: Vec<String>) -> std::io::Result<()> {
             });
 
         if let Some(_comment) = &arg_comment_value {
-            println!("Comment provided: {}", _comment);
+            // println!("Comment provided: {}", _comment);
             comment = arg_comment_value.unwrap();
         }
 
@@ -258,7 +258,7 @@ fn run_cli_mode(is_global: bool, args: Vec<String>) -> std::io::Result<()> {
             .map(|value: &String| value.to_string());
 
         if let Some(_exec_path) = &arg_exec_path_value {
-            println!("Executable path provided: {}", _exec_path);
+            // println!("Executable path provided: {}", _exec_path);
             exec_path = arg_exec_path_value.unwrap();
         }
 
@@ -268,7 +268,7 @@ fn run_cli_mode(is_global: bool, args: Vec<String>) -> std::io::Result<()> {
             .map(|value: &String| value.to_string());
 
         if let Some(_icon_path) = &arg_icon_path_value {
-            println!("Icon path provided: {}", _icon_path);
+            // println!("Icon path provided: {}", _icon_path);
             icon_path = arg_icon_path_value.unwrap();
         }
 
@@ -278,7 +278,7 @@ fn run_cli_mode(is_global: bool, args: Vec<String>) -> std::io::Result<()> {
             .map(|value: &String| value.to_string());
 
         if let Some(_terminal_app) = &arg_terminal_value {
-            println!("Terminal provided: {}", _terminal_app);
+            // println!("Terminal provided: {}", _terminal_app);
             terminal_app = arg_terminal_value.unwrap();
         }
 
@@ -288,7 +288,7 @@ fn run_cli_mode(is_global: bool, args: Vec<String>) -> std::io::Result<()> {
             .map(|value: &String| value.to_string());
 
         if let Some(_app_type) = &arg_app_type_value {
-            println!("App type provided: {}", _app_type);
+            // println!("App type provided: {}", _app_type);
             app_type = arg_app_type_value.unwrap();
         }
 
@@ -298,7 +298,7 @@ fn run_cli_mode(is_global: bool, args: Vec<String>) -> std::io::Result<()> {
             .map(|value: &String| value.to_string());
 
         if let Some(_categories) = &arg_categories_value {
-            println!("Categories provided: {}", _categories);
+            // println!("Categories provided: {}", _categories);
             categories = arg_categories_value.unwrap();
         }
 
@@ -306,7 +306,7 @@ fn run_cli_mode(is_global: bool, args: Vec<String>) -> std::io::Result<()> {
     } else {
         // --name has not been used, thus details will need to be provided by user
 
-        println!("Ask user for details");
+        // println!("Ask user for details");
 
         // Ask user to populate details for .desktop file
         user_details::ask_user_to_fill_in_details(
