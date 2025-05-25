@@ -90,7 +90,7 @@ fn main() -> std::io::Result<()> {
     let is_cli = args.iter().any(|arg| arg == flags::LOCAL || arg == flags::GLOBAL || arg == flags::NAME);
     let is_global = args.iter().any(|arg| arg == flags::GLOBAL);
 
-    // Add these checks before the if is_cli block
+
     let has_name = args.iter().any(|arg| arg == "--name");
     let has_desktop_flags = args.iter().any(|arg| 
         arg == flags::COMMENT ||
@@ -561,8 +561,7 @@ fn build_ui(app: &Application, state: &Arc<Mutex<AppState>>) {
         ("categories", Label::new(Some("Categories:")), Entry::new()),
     ];
 
-    
-    
+
     // Add labels and entries to the grid
     for (i, (_, label, entry)) in entries.iter().enumerate() {
         label.set_halign(gtk::Align::End);
@@ -599,7 +598,7 @@ fn build_ui(app: &Application, state: &Arc<Mutex<AppState>>) {
     // Handle button click
     button.connect_clicked(move |_| {
         let mut state = state_clone.lock().unwrap();
-        
+
         // Update state with values from entries
         for (field_name, _, entry) in &entries_clone {
             let value = entry.text().to_string();
@@ -618,7 +617,7 @@ fn build_ui(app: &Application, state: &Arc<Mutex<AppState>>) {
         if !state.name.is_empty() {
             let mut path = dirs::home_dir()
                 .expect("Failed to get home directory");
-            
+
             path.push(".local/share/applications/");
             path.push(format!("{}.desktop", state.name.trim()));
 
@@ -649,8 +648,8 @@ fn build_ui(app: &Application, state: &Arc<Mutex<AppState>>) {
                         gtk::DialogFlags::MODAL,
                         gtk::MessageType::Info,
                         gtk::ButtonsType::Ok,
-                        &format!("Successfully created .desktop file at:\n{}", 
-                                path.to_str().unwrap_or(""))
+                        &format!("Successfully created .desktop file at:\n{}",
+                                 path.to_str().unwrap_or(""))
                     );
 
                     dialog.connect_response(|dialog, _| {
@@ -669,35 +668,5 @@ fn build_ui(app: &Application, state: &Arc<Mutex<AppState>>) {
     });
 
     window.present();
-}
 
-fn get_multi_word_arg(args: &[String], flag: &str) -> Option<String> {
-    args.iter()
-        .position(|arg| arg == flag)
-        .and_then(|index| {
-            // First, check if the next argument is quoted
-            if let Some(next_arg) = args.get(index + 1) {
-                if next_arg.starts_with('"') && next_arg.ends_with('"') {
-                    // Return the quoted string without the quotes
-                    return Some(next_arg[1..next_arg.len()-1].to_string());
-                }
-            }
-
-            // If not quoted, collect all words until the next -- or end
-            let remaining_args = &args[index + 1..];
-            let mut comment_words = Vec::new();
-            
-            for arg in remaining_args {
-                if arg.starts_with("--") {
-                    break;
-                }
-                comment_words.push(arg);
-            }
-            
-            if comment_words.is_empty() {
-                None
-            } else {
-                Some(comment_words.iter().map(|s| s.as_str()).collect::<Vec<_>>().join(" "))
-            }
-        })
 }
