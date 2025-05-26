@@ -1,9 +1,12 @@
 [package]
 name = "CreateDesktopFile"
-version = "1.0.0"
+version = "1.0.1"
 edition = "2024"
 
 [dependencies]
 dirs = "5.0"
 nix = { version = "0.30.1", features = ["user"] }
 gtk = { version = "0.9.6", package = "gtk4", features = ["v4_6"] }
+
+[dev-dependencies]
+tempfile = "3.2"
