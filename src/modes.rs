@@ -3,10 +3,24 @@ use std::io::Write;
 use std::sync::{Arc, Mutex};
 use gtk::Application;
 use gtk::prelude::{ApplicationExt, ApplicationExtManual};
-use crate::{build_ui, desktop_entry, flags, path, user_details, AppState};
+use crate::{build_ui, desktop_entry, flags, user_details, AppState};
 
-pub fn RUN_CLI(is_global: bool, args: Vec<String>, local_share_applications: &str, global_share_applications: &str) -> std::io::Result<()> {
+pub fn run_cli(is_global: bool, args: Vec<String>, local_share_applications: &str, global_share_applications: &str) -> std::io::Result<()> {
 
+    let has_name = args.iter().any(|arg| arg == flags::NAME);
+    let has_desktop_flags = args.iter().any(|arg|
+        arg == flags::COMMENT ||
+            arg == flags::EXEC_PATH ||
+            arg == flags::ICON_PATH ||
+            arg == flags::TERMINAL_APP ||
+            arg == flags::APP_TYPE ||
+            arg == flags::CATEGORIES
+    );
+
+    // If desktop flags are present but no --name, panic
+    if has_desktop_flags && !has_name {
+        panic!("Need to specify {} alongside passing details. Try again. Exiting.", flags::NAME);
+    }
 
     // Get home directory
     let mut path = dirs::home_dir()
@@ -164,7 +178,7 @@ pub fn RUN_CLI(is_global: bool, args: Vec<String>, local_share_applications: &st
     Ok(())
 }
 
-pub fn RUN_GUI(local_share_applications: &str) -> std::io::Result<()> {
+pub fn run_gui(local_share_applications: &str) -> std::io::Result<()> {
     let state = Arc::new(Mutex::new(AppState::default()));
 
     let app = Application::builder()

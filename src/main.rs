@@ -43,22 +43,6 @@ fn main() -> std::io::Result<()> {
     let is_global = args.iter().any(|arg| arg == flags::GLOBAL);
 
 
-    let has_name = args.iter().any(|arg| arg == flags::NAME);
-    let has_desktop_flags = args.iter().any(|arg| 
-        arg == flags::COMMENT ||
-        arg == flags::EXEC_PATH ||
-        arg == flags::ICON_PATH ||
-        arg == flags::TERMINAL_APP ||
-        arg == flags::APP_TYPE ||
-        arg == flags::CATEGORIES
-    );
-
-    // If desktop flags are present but no --name, panic
-    if has_desktop_flags && !has_name {
-        panic!("Need to specify {} alongside passing details. Try again. Exiting.", flags::NAME);
-    }
-
-
     // Check if user wants to view help information first
     if args.iter().any(|arg| arg == flags::HELP) {
         help_information::display_help_information(args);
@@ -73,10 +57,10 @@ fn main() -> std::io::Result<()> {
     
     if is_cli {
         // Run CLI version
-        modes::RUN_CLI(is_global, args, path::LOCAL_SHARE_APPLICATIONS, path::GLOBAL_SHARE_APPLICATIONS)?;
+        modes::run_cli(is_global, args, path::LOCAL_SHARE_APPLICATIONS, path::GLOBAL_SHARE_APPLICATIONS)?;
     } else {
         // Run GUI version
-        modes::RUN_GUI(path::LOCAL_SHARE_APPLICATIONS)?;
+        modes::run_gui(path::LOCAL_SHARE_APPLICATIONS)?;
     }
 
     Ok(())

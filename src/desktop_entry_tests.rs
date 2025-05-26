@@ -1,11 +1,11 @@
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
     use std::fs;
     use std::path::PathBuf;
     use tempfile::tempdir;
     use crate::{break_here_if_os_not_supported, desktop_entry, path};
-    use crate::modes::RUN_CLI;
+    use crate::modes::run_cli;
 
     // Helper function to setup a temporary directory for tests
     fn setup_test_dir() -> (tempfile::TempDir, PathBuf) {
@@ -44,7 +44,7 @@ mod tests {
 
         println!("Running cli mode");
         // Run CLI mode with test arguments
-        let result = RUN_CLI(false, args, test_path.to_str().unwrap(), "");
+        let result = run_cli(false, args, test_path.to_str().unwrap(), "");
 
         println!("Getting result");
         assert!(result.is_ok());
@@ -79,14 +79,14 @@ mod tests {
             "Test Application".to_string(),
         ];
         
-        RUN_CLI(false, args, path::LOCAL_SHARE_APPLICATIONS, path::GLOBAL_SHARE_APPLICATIONS).unwrap();
+        run_cli(false, args, path::LOCAL_SHARE_APPLICATIONS, path::GLOBAL_SHARE_APPLICATIONS).unwrap();
 
         // TODO: This is not failing or panicing
     }
 
     #[test]
     fn test_cli_with_spaces_in_comment() {
-        let (temp_dir, test_path) = setup_test_dir();
+        let (_temp_dir, test_path) = setup_test_dir();
         
         let args = vec![
             "CreateDesktopFile".to_string(),
@@ -99,7 +99,7 @@ mod tests {
             "/usr/bin/test".to_string(),
         ];
 
-        let result = RUN_CLI(false, args, test_path.to_str().unwrap(), test_path.to_str().unwrap());
+        let result = run_cli(false, args, test_path.to_str().unwrap(), test_path.to_str().unwrap());
         assert!(result.is_ok());
         
         let content = fs::read_to_string(test_path.join("TestApp.desktop"))
