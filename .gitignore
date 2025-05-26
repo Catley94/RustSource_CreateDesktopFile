@@ -16,3 +16,4 @@ Cargo.lock
 .idea/RustSource_CreateDesktopFile.iml
 .idea/vcs.xml
 **/.idea
+/create-desktop-file.zip

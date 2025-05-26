@@ -1,3 +1,2 @@
 Add Docker to project
 Publish Image
-Only work for Linux OS

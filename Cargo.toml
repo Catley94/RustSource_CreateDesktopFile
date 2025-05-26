@@ -1,6 +1,6 @@
 [package]
-name = "CreateDesktopFile"
-version = "1.0.1"
+name = "create-desktop-file"
+version = "1.1.0"
 edition = "2024"
 
 [dependencies]
