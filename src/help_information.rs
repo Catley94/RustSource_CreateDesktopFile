@@ -1,7 +1,7 @@
 use crate::flags;
 pub fn display_help_information(args: Vec<String>) {
-    println!("CreateDesktopFile v{}", env!("CARGO_PKG_VERSION"));
-    println!("CreateDesktopFile is a simple tool to create .desktop files for Linux. \n\
+    println!("create-desktop-file v{}", env!("CARGO_PKG_VERSION"));
+    println!("create-desktop-file is a simple tool to create .desktop files for Linux. \n\
     By default it will open a GUI app, however this can also run in Terminal by specifying the below flags/arguments");
     println!("Usage: {}  [--global | --local] etc.", args[0]);
     println!("Options:");
