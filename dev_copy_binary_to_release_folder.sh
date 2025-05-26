@@ -7,6 +7,8 @@ if ! command -v zip >/dev/null 2>&1; then
     exit 1
 fi
 
+echo "Removing ${PROGRAM_NAME}.zip"
+rm ./${PROGRAM_NAME}.zip
 
 echo "Building release version..."
 cargo build --release || {
