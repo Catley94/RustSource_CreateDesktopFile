@@ -32,7 +32,7 @@ impl DesktopEntry {
 
     pub fn to_string(&self) -> String {
         format!(
-            "[Desktop Entry]\r\
+            "[Desktop Entry]\n\
             Name={}\n\
             Comment={}\n\
             Exec={}\n\

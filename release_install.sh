@@ -37,7 +37,7 @@ install_program() {
         --global \
         --name "${PROGRAM_NAME}" \
         --exec-path "/usr/share/${PROGRAM_NAME}/${PROGRAM_NAME}" \
-        --terminal-app true \
+        --terminal-app false \
         --app-type Application \
         --categories Development
 }
