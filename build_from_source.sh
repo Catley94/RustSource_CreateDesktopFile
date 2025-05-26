@@ -67,7 +67,7 @@ main() {
     install_program
 
     echo "Installation complete!"
-    echo "You can now run '${PROGRAM_NAME}' from anywhere"
+    echo "You can now run '${ALIASES[0]}' or '${ALIASES[1]}' from anywhere"
 }
 
 main "$@"

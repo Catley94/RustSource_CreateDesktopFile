@@ -1,6 +1,7 @@
 #!/bin/bash
 
 PROGRAM_NAME="create-desktop-file"
+ALIASES=("create-desktop-file" "cdf")
 
 # Check if running as root
 if [ "$EUID" -ne 0 ]; then
@@ -26,7 +27,10 @@ install_program() {
     chmod +x "/usr/share/${PROGRAM_NAME}/${PROGRAM_NAME}"
     
     # Create symlink
-    ln -sf "/usr/share/${PROGRAM_NAME}/${PROGRAM_NAME}" "/usr/local/bin/${PROGRAM_NAME}"
+    for alias in "${ALIASES[@]}"; do
+          echo "Creating symbolic link in /usr/local/bin for ${alias}"
+          ln -sf "/usr/share/${PROGRAM_NAME}/${PROGRAM_NAME}" "/usr/local/bin/${alias}"
+        done
     
     # Create desktop file
     "/usr/share/${PROGRAM_NAME}/${PROGRAM_NAME}" \
@@ -43,7 +47,7 @@ main() {
     install_program
     
     echo "Installation complete!"
-    echo "You can now run '${PROGRAM_NAME}' from anywhere"
+    echo "You can now run '${ALIASES[0]}' or '${ALIASES[1]}' from anywhere"
 }
 
 main "$@"
