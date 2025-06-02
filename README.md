@@ -9,8 +9,21 @@ Name, Comment, Exec, Icon, Terminal, Type, Categories
 
 (Please create a pull request if you want to add more options)
 
-![CDF_Details.png](images/CDF_Details.png)
-![CDF_Help.png](images/CDF_Help.png)
+### Different ways to create a .desktop file, GUI, CLI Flags and CLI In-line
+
+<img alt="CDF_GUI.png" height="300" src="images/CDF_GUI.png" width="300"/>
+<br />
+<img alt="CDF_GUI.png" height="200" src="images/CDF_CLI_Params.png" width="500"/>
+<br />
+<img alt="CDF_GUI.png" height="200" src="images/CDF_CLI_Inline.png" width="500"/>
+
+### Resulting .desktop file
+<img alt="CDF_GUI.png" height="250" src="images/CDF_Desktop_File.png" width="300"/>
+
+
+### Informative Help and two alias (create-desktop-file and cdf)
+![CDF_Alias_Help.png](images/CDF_Alias_Help.png)
+
 
 ## Install 
 
