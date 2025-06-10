@@ -97,6 +97,7 @@ fn build_ui(app: &Application, state: &Arc<Mutex<AppState>>) {
         ("icon_path", Label::new(Some("Icon Path:")), Entry::new()),
         ("terminal_app", Label::new(Some("Terminal App?:")), Entry::new()),
         ("categories", Label::new(Some("Categories:")), Entry::new()),
+        ("type", Label::new(Some("Type:")), Entry::new()),
     ];
 
 
@@ -109,7 +110,7 @@ fn build_ui(app: &Application, state: &Arc<Mutex<AppState>>) {
     }
 
     let button = Button::with_label("Generate");
-    grid.attach(&button, 0, 6, 2, 1);
+    grid.attach(&button, 0, 7, 2, 1);
     button.set_margin_top(12);
     button.set_hexpand(true);
 
@@ -118,7 +119,7 @@ fn build_ui(app: &Application, state: &Arc<Mutex<AppState>>) {
     info_label.set_margin_top(12);
     info_label.set_wrap(true);
     info_label.set_margin_start(6);
-    grid.attach(&info_label, 0, 7, 2, 1);  // Attach to row 7 (after the button which is at row 6)
+    grid.attach(&info_label, 0, 8, 2, 1);  // Attach to row 7 (after the button which is at row 6)
 
     // Create the window
     let window = ApplicationWindow::builder()
@@ -147,6 +148,7 @@ fn build_ui(app: &Application, state: &Arc<Mutex<AppState>>) {
                 "icon_path" => state.icon_path = value,
                 "terminal_app" => state.terminal_app = value,
                 "categories" => state.categories = value,
+                "type" => state.app_type = value,
                 _ => {}
             }
         }

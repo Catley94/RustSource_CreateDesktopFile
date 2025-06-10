@@ -44,3 +44,9 @@ Name, Comment, Exec, Icon, Terminal, Type, Categories
 `CreateDesktopFile --global` Will create the .desktop file in /usr/share/applications/ and ask the user to populate the file.` (Note: this mode needs sudo permission)
 
 `CreateDesktopFile --help` Displays information on how to use the program.
+
+### For Developer Purposes - Release steps
+- Create release build `cargo build --release`
+- Create new release zip run `dev_copy_binary_to_release_folder.sh`
+- Push new release zip to GitHub
+- Push new commits to GitHub
